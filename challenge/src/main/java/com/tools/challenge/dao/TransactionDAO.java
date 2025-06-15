@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class TransactionDAO {
@@ -15,10 +16,6 @@ public class TransactionDAO {
 
     public Transaction getById(Long id) {
         return transactions.get(id);
-    }
-
-    public Boolean deleteById(Long id) {
-        return transactions.remove(id) != null;
     }
 
     public Transaction save(Transaction transaction) {
@@ -30,19 +27,18 @@ public class TransactionDAO {
         return new ArrayList<>(transactions.values());
     }
 
+
     public Long nextId() {
         return transactions.size() + 1L;
     }
 
     public String generateNsu() {
-        long nsu = (long) (Math.random() * 1_000_000_0000L);
-        String formattedNsu = String.format("%010d", nsu);
-        return formattedNsu;
+        long nsu = ThreadLocalRandom.current().nextLong(1_000_000_000L, 10_000_000_000L);
+        return String.valueOf(nsu);
     }
 
     public String generateAuthorizationCode() {
-        long authorization = (long) (Math.random() * 1_000_000_00L);
-        String formattedAuthorization = String.format("%09d", authorization);
-        return formattedAuthorization;
+        long authorization = ThreadLocalRandom.current().nextLong(0, 1_000_000_000L);
+        return String.format("%09d", authorization);
     }
 }

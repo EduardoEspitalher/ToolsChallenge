@@ -36,4 +36,11 @@ public class TransactionController {
         return ResponseEntity.ok(new WrapperDTO(result));
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        service.refound(id);
+        return ResponseEntity.ok().build();
+    }
+
+
 }

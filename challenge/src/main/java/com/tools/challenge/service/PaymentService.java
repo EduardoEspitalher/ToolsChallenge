@@ -3,6 +3,7 @@ package com.tools.challenge.service;
 import com.tools.challenge.dao.TransactionDAO;
 import com.tools.challenge.dto.transation.TransactionDTO;
 import com.tools.challenge.enumeration.StatusType;
+import com.tools.challenge.exception.InvalidTransactionStateException;
 import com.tools.challenge.mapper.TransactionMapper;
 import com.tools.challenge.model.Transaction;
 import lombok.RequiredArgsConstructor;
@@ -41,11 +42,14 @@ public class PaymentService {
         return mapper.toDTO(entity);
     }
 
-    public Transaction refound(Long id, Transaction transaction) {
+    public Transaction refound(Long id) {
         var payment = transactionDAO.getById(id);
-        payment.getDescription().setStatus(StatusType.valueOf("CANCELADO"));
+        if (payment.getDescription().getStatus() == StatusType.AUTORIZADO) {
+            payment.getDescription().setStatus(StatusType.valueOf("CANCELADO"));
+        } else {
+            throw new InvalidTransactionStateException("Transação de ID-" + payment.getId() + " ,NSU-" + payment.getDescription().getNsu() + " já está cancelada.");
+        }
         return transactionDAO.save(payment);
     }
-
 
 }
