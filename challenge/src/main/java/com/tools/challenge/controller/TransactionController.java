@@ -30,5 +30,10 @@ public class TransactionController {
         );
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<WrapperDTO> getById(@PathVariable("id") Long id) {
+        var result = service.findById(id);
+        return ResponseEntity.ok(new WrapperDTO(result));
+    }
 
 }

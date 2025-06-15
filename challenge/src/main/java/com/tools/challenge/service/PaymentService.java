@@ -36,6 +36,11 @@ public class PaymentService {
                 .collect(Collectors.toList());
     }
 
+    public TransactionDTO findById(Long id) {
+        Transaction entity = transactionDAO.getById(id);
+        return mapper.toDTO(entity);
+    }
+
     public Transaction refound(Long id, Transaction transaction) {
         var payment = transactionDAO.getById(id);
         payment.getDescription().setStatus(StatusType.valueOf("CANCELADO"));
