@@ -110,11 +110,17 @@ public class PaymentServiceTest {
     @Test
     void deveBuscarTransacaoPorId() {
         Transaction transaction = new Transaction();
+        transaction.setId(1L);
+
+        TransactionDTO dtoEsperado = new TransactionDTO();
+        dtoEsperado.setId(1L);
+
         when(dao.getById(1L)).thenReturn(transaction);
-        when(mapper.toDTO(transaction)).thenReturn(new TransactionDTO());
+        when(mapper.toDTO(transaction)).thenReturn(dtoEsperado);
 
         TransactionDTO dto = service.findById(1L);
 
         assertNotNull(dto);
+        assertEquals(1L, dto.getId());
     }
 }
